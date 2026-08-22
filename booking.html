@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Book Yardscape Landscaping & Beautification Services.">
+  <title>Book a Service | Yardscape</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html"><img src="yardscape-logo.jpg" alt="Yardscape logo"></a>
+      <nav><a href="index.html">Home</a><a href="index.html#services">Services</a></nav>
+    </div>
+  </header>
+
+  <main class="booking-page">
+    <div class="container narrow">
+      <p class="eyebrow">Booking</p>
+      <h1>Choose your service & time.</h1>
+      <p class="intro">Select a service, date and available time. Fixed-price services show their listed price; plant beds and flowers can be requested as a custom quote.</p>
+
+      <form id="bookingForm" class="booking-form">
+        <div class="form-section">
+          <h2>1. Service</h2>
+          <div class="service-options">
+            <label class="service-option"><input type="radio" name="service" value="General Lawncare" data-price="8000" required><span><b>General Lawncare</b><small>JMD 8,000</small></span></label>
+            <label class="service-option"><input type="radio" name="service" value="Plant Bed Maintenance" data-price="0" data-quote="true"><span><b>Plant Bed Maintenance</b><small>Custom quote</small></span></label>
+            <label class="service-option"><input type="radio" name="service" value="Flowers" data-price="0" data-quote="true"><span><b>Flowers</b><small>Custom quote</small></span></label>
+            <label class="service-option"><input type="radio" name="service" value="Hedging" data-price="5000" required><span><b>Hedging</b><small>JMD 5,000</small></span></label>
+            <label class="service-option"><input type="radio" name="service" value="Sprinkler Installation" data-price="12000" required><span><b>Sprinkler Installation</b><small>JMD 12,000</small></span></label>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-section">
+            <h2>2. Date & time</h2>
+            <div class="calendar-head"><button type="button" id="prevMonth">‹</button><strong id="monthLabel"></strong><button type="button" id="nextMonth">›</button></div><div id="calendar" class="calendar"></div><input id="date" name="date" type="hidden" required><div id="selectedDateLabel" class="selected-date">Select a date</div><div id="times" class="times"></div><input id="time" name="time" type="hidden" required>
+            <p class="hint">The date/time is a booking request. Yardscape can confirm or adjust it by email.</p>
+          </div>
+
+          <div class="form-section">
+            <h2>3. Your details</h2>
+            <label for="name">Full name</label>
+            <input id="name" name="name" type="text" autocomplete="name" required>
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email" autocomplete="email" required>
+            <label for="phone">Phone / WhatsApp</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" required>
+            <label for="location">Property location</label>
+            <input id="location" name="location" type="text" placeholder="Town / area" required>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2>4. Notes</h2>
+          <label for="notes">Tell us anything we should know</label>
+          <textarea id="notes" name="notes" rows="5" placeholder="Property size, access details, special requests, etc."></textarea>
+        </div>
+
+        <div class="summary">
+          <div><span>Selected service</span><strong id="summaryService">—</strong></div>
+          <div><span>Price / quote</span><strong id="summaryPrice">—</strong></div>
+        </div>
+
+        <button class="btn btn-full" type="submit">Send Booking Request</button>
+        <p id="status" class="status" role="status"></p>
+        <p class="privacy-note">By submitting, you are requesting a booking/quote. Your information is sent to Yardscape for follow-up.</p>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <img class="footer-logo" src="yardscape-logo.jpg" alt="Yardscape logo"><div class="footer-contact"><a href="mailto:Yardscapelandscaping@gmail.com">Yardscapelandscaping@gmail.com</a><a href="tel:+18763427405">+1 876 342-7405</a><a href="https://instagram.com/yardscapelandscapingservices" target="_blank" rel="noopener">@yardscapelandscapingservices</a></div>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+  <script>
+const ENDPOINT='YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL';
+const today=new Date();today.setHours(0,0,0,0);let view=new Date(today.getFullYear(),today.getMonth(),1),booked={},selectedDate='';
+const slots=['8:00 AM','9:00 AM','10:00 AM','11:00 AM','12:00 PM','1:00 PM','2:00 PM','3:00 PM','4:00 PM'];
+const $=id=>document.getElementById(id);function iso(y,m,d){return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`}
+function draw(){ $('monthLabel').textContent=view.toLocaleDateString(undefined,{month:'long',year:'numeric'});const c=$('calendar');c.innerHTML=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(x=>`<div class="dow">${x}</div>`).join('');const first=new Date(view.getFullYear(),view.getMonth(),1).getDay(),days=new Date(view.getFullYear(),view.getMonth()+1,0).getDate();for(let i=0;i<first;i++)c.innerHTML+='<div></div>';for(let d=1;d<=days;d++){let x=iso(view.getFullYear(),view.getMonth(),d),dt=new Date(view.getFullYear(),view.getMonth(),d),b=document.createElement('button');b.type='button';b.className='day';b.textContent=d;if(dt<today||dt.getDay()===0)b.disabled=true;if(x===selectedDate)b.classList.add('selected');b.onclick=()=>choose(x);c.appendChild(b)}}
+async function load(){if(ENDPOINT.startsWith('YOUR_')){draw();return}try{let r=await fetch(ENDPOINT+'?action=availability&start='+iso(view.getFullYear(),view.getMonth(),1)+'&end='+iso(view.getFullYear(),view.getMonth()+1,new Date(view.getFullYear(),view.getMonth()+1,0).getDate()));let j=await r.json();booked=j.booked||{};draw();if(selectedDate)timesFor(selectedDate)}catch(e){draw()}}
+function choose(x){selectedDate=x;$('date').value=x;$('selectedDateLabel').textContent=new Date(x+'T12:00:00').toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});draw();timesFor(x)}
+function timesFor(x){$('time').value='';$('times').innerHTML='';slots.forEach(t=>{let b=document.createElement('button');b.type='button';b.className='time';b.textContent=t;if((booked[x]||[]).includes(t)){b.disabled=true;b.textContent=t+' · Booked'}else b.onclick=()=>{$$('.time').forEach(q=>q.classList.remove('selected'));b.classList.add('selected');$('time').value=t};$('times').appendChild(b)})}
+const $$=sel=>document.querySelectorAll(sel);$('prevMonth').onclick=()=>{let n=new Date(view.getFullYear(),view.getMonth()-1,1);if(n>=new Date(today.getFullYear(),today.getMonth(),1)){view=n;load()}};$('nextMonth').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()+1,1);load()};
+document.querySelectorAll('input[name="service"]').forEach(i=>i.addEventListener('change',()=>{let x=document.querySelector('input[name="service"]:checked');$('summaryService').textContent=x?.value||'—';$('summaryPrice').textContent=x?.dataset.quote==='true'?'Custom quote':'JMD '+Number(x?.dataset.price||0).toLocaleString()}));
+$('bookingForm').addEventListener('submit',async e=>{e.preventDefault();if(!$('date').value||!$('time').value){$('status').className='status error';$('status').textContent='Please choose an available date and time.';return}if(ENDPOINT.startsWith('YOUR_')){$('status').className='status error';$('status').textContent='Connect the Google Apps Script URL first. See SETUP.md.';return}$('status').className='status';$('status').textContent='Checking availability and sending…';let x=document.querySelector('input[name="service"]:checked'),data=Object.fromEntries(new FormData(e.target).entries());data.price=x?.dataset.quote==='true'?'Custom quote':'JMD '+Number(x?.dataset.price||0).toLocaleString();try{let r=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)}),j=await r.json();if(!j.ok)throw new Error(j.error||'Booking failed');$('status').className='status success';$('status').textContent='Booking confirmed! Yardscape will contact you by email.';e.target.reset();selectedDate='';load()}catch(err){$('status').className='status error';$('status').textContent=err.message.includes('already')?'Sorry, that time was just booked. Please choose another time.':'We could not complete the booking. Please try again or contact Yardscape directly.';load()}});draw();load();
+</script>
+</body>
+</html>

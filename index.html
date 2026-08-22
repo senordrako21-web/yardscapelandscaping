@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Yardscape Landscaping and Beautification Services. Based in St. Ann, Jamaica and serving all areas. Lawn care, plant bed maintenance, flower planting, flower hedging and sprinkler installation.">
+<title>Yardscape Landscaping & Beautification Services</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="#top"><img src="yardscape-logo.jpg" alt="Yardscape Landscaping and Beautification Services logo"></a>
+    <button class="menu-toggle" aria-label="Open menu">☰</button>
+    <nav class="main-nav">
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+      <a href="#hours">Hours</a>
+      <a href="#contact">Contact</a>
+      <a class="btn btn-small" href="#booking">Book a Service</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <p class="eyebrow">St. Ann, Jamaica • Serving all areas</p>
+      <h1>Make your outdoor space <span>stand out.</span></h1>
+      <p class="hero-copy">Professional landscaping and beautification services for homes and businesses. From lawn care and plant beds to flower planting, flower hedging and sprinkler installation.</p>
+      <div class="hero-actions">
+        <a class="btn" href="#booking">Book a Service</a>
+        <a class="btn btn-ghost" href="mailto:Yardscapelandscaping@gmail.com?subject=Yardscape%20Quote%20Request">Request a Quote</a>
+      </div>
+      <p class="small-note">Do it wid Yaadscape and beautify yuh yaad space.</p>
+    </div>
+    <div class="hero-card">
+      <div class="hero-badge">🌿</div>
+      <h3>Easy online booking</h3>
+      <p>Pick your service, choose an available date and time, and send your booking directly from this homepage.</p>
+      <a href="#booking" class="text-link">Check availability →</a>
+    </div>
+  </div>
+</section>
+
+<section id="services" class="section">
+  <div class="container">
+    <div class="section-heading">
+      <p class="eyebrow">Our services</p>
+      <h2>Simple, reliable yard care.</h2>
+    </div>
+    <div class="cards">
+      <article class="card"><div class="icon">✂️</div><h3>General Lawncare</h3><p>Mowing, edging and routine lawn maintenance to keep your grass neat and healthy.</p><strong>JMD 8,000</strong></article>
+      <article class="card"><div class="icon">🌱</div><h3>Plant Bed Maintenance</h3><p>Routine care, cleanup and maintenance for your garden and plant beds.</p><strong>Quote required</strong></article>
+      <article class="card"><div class="icon">🌸</div><h3>Flower Planting</h3><p>Flower planting and landscape beautification tailored to your property.</p><strong>Quote required</strong></article>
+      <article class="card"><div class="icon">🌿</div><h3>Flower Hedging</h3><p>Shape and maintain flowering hedges for a clean and attractive property.</p><strong>JMD 5,000</strong></article>
+      <article class="card"><div class="icon">💧</div><h3>Sprinkler Installation</h3><p>Practical sprinkler installation to help keep your landscape properly watered.</p><strong>Quote required</strong></article>
+    </div>
+  </div>
+</section>
+
+<section id="booking" class="section booking-section">
+  <div class="container narrow">
+    <div class="section-heading">
+      <p class="eyebrow">Book directly online</p>
+      <h2>Choose your service, date and time.</h2>
+      <p class="intro">Booked times are automatically removed from the calendar. Quote services can be requested through the same form.</p>
+    </div>
+    <form id="bookingForm" class="booking-form">
+      <section class="form-section">
+        <h3>1. Choose a service</h3>
+        <div class="service-options">
+          <label class="service-option"><input type="radio" name="service" value="General Lawncare" data-price="8000" required><span><b>General Lawncare</b><small>JMD 8,000</small></span></label>
+          <label class="service-option"><input type="radio" name="service" value="Plant Bed Maintenance" data-quote="true"><span><b>Plant Bed Maintenance</b><small>Quote required</small></span></label>
+          <label class="service-option"><input type="radio" name="service" value="Flower Planting" data-quote="true"><span><b>Flower Planting</b><small>Quote required</small></span></label>
+          <label class="service-option"><input type="radio" name="service" value="Flower Hedging" data-price="5000"><span><b>Flower Hedging</b><small>JMD 5,000</small></span></label>
+          <label class="service-option"><input type="radio" name="service" value="Sprinkler Installation" data-quote="true"><span><b>Sprinkler Installation</b><small>Quote required</small></span></label>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <h3>2. Choose a date and available time</h3>
+        <div class="calendar-head"><button type="button" id="prevMonth" class="calendar-arrow">‹</button><strong id="monthLabel"></strong><button type="button" id="nextMonth" class="calendar-arrow">›</button></div>
+        <div id="calendar" class="calendar"></div>
+        <input type="hidden" id="date" name="date" required>
+        <div id="selectedDateLabel" class="selected-date">Select a date</div>
+        <div id="times" class="times"></div>
+        <input type="hidden" id="time" name="time" required>
+        <p class="hint">Business hours: Monday–Friday 8:00 AM–6:00 PM • Saturday 9:00 AM–4:00 PM • Sunday closed.</p>
+      </section>
+
+      <section class="form-section">
+        <h3>3. Your details</h3>
+        <div class="form-grid">
+          <div><label for="name">Full name</label><input id="name" name="name" autocomplete="name" required></div>
+          <div><label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+          <div><label for="phone">Phone / WhatsApp</label><input id="phone" name="phone" type="tel" autocomplete="tel" required></div>
+          <div><label for="location">Property location</label><input id="location" name="location" placeholder="Town / parish / area" required></div>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <h3>4. Notes / quote details</h3>
+        <label for="notes">Tell us what you need</label>
+        <textarea id="notes" name="notes" rows="4" placeholder="Describe your yard, property size, plants, sprinkler needs or any special requests."></textarea>
+      </section>
+
+      <div class="summary"><div><span>Service</span><strong id="summaryService">—</strong></div><div><span>Price / quote</span><strong id="summaryPrice">—</strong></div></div>
+      <button class="btn btn-full" type="submit">Send Booking Request</button>
+      <p id="status" class="status"></p>
+    </form>
+  </div>
+</section>
+
+<section id="about" class="section section-dark">
+  <div class="container split">
+    <div><p class="eyebrow light">About Yardscape</p><h2>Based in St. Ann. Ready to serve any area.</h2></div>
+    <div><p>Yardscape Landscaping and Beautification Services is based in St. Ann, Jamaica and serves customers across Jamaica. We focus on clean finishing, dependable service and practical solutions that make outdoor spaces look and feel better.</p><a class="btn btn-light" href="#booking">Book a Service</a></div>
+  </div>
+</section>
+
+<section id="hours" class="section hours-section">
+  <div class="container hours-grid">
+    <div><p class="eyebrow">Business hours</p><h2>We're here when you need us.</h2></div>
+    <div class="hours-card"><div><b>Monday – Friday</b><span>8:00 AM – 6:00 PM</span></div><div><b>Saturday</b><span>9:00 AM – 4:00 PM</span></div><div><b>Sunday</b><span>Closed</span></div></div>
+  </div>
+</section>
+
+<section id="contact" class="contact-section">
+  <div class="container contact-grid">
+    <div><img class="contact-logo" src="yardscape-logo.jpg" alt="Yardscape logo"></div>
+    <div><p class="eyebrow">Contact Yardscape</p><h2>Let's make your yard look its best.</h2>
+      <div class="contact-list">
+        <a href="mailto:Yardscapelandscaping@gmail.com">✉ Yardscapelandscaping@gmail.com</a>
+        <a href="tel:+18763427405">☎ +1 876 342-7405</a>
+        <a href="https://instagram.com/yardscapelandscapingservices" target="_blank" rel="noopener">◎ @yardscapelandscapingservices</a>
+        <span>📍 St. Ann, Jamaica • Serving all areas</span>
+      </div>
+      <a class="btn" href="#booking">Book a Service</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="container footer-inner"><img src="yardscape-logo.jpg" alt="Yardscape logo" class="footer-logo"><div class="footer-contact"><a href="mailto:Yardscapelandscaping@gmail.com">Yardscapelandscaping@gmail.com</a><a href="tel:+18763427405">+1 876 342-7405</a><a href="https://instagram.com/yardscapelandscapingservices" target="_blank" rel="noopener">@yardscapelandscapingservices</a></div></div></footer>
+
+<script src="script.js"></script>
+<script>
+const ENDPOINT='YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL';
+const today=new Date(); today.setHours(0,0,0,0);
+let view=new Date(today.getFullYear(),today.getMonth(),1), booked={},selectedDate='';
+const calendar=document.getElementById('calendar'), times=document.getElementById('times');
+const dateInput=document.getElementById('date'), timeInput=document.getElementById('time'), statusEl=document.getElementById('status');
+function pad(n){return String(n).padStart(2,'0')}
+function isoDate(y,m,d){return `${y}-${pad(m+1)}-${pad(d)}`}
+function dateFromIso(s){return new Date(s+'T12:00:00')}
+function slotsForDate(iso){const d=dateFromIso(iso),day=d.getDay(); if(day===0)return []; const start=day===6?9:8, end=day===6?16:18; const out=[]; for(let h=start;h<end;h++){const suffix=h>=12?'PM':'AM', hr=h%12||12; out.push(`${hr}:00 ${suffix}`)} return out;}
+function renderCalendar(){
+ document.getElementById('monthLabel').textContent=view.toLocaleDateString(undefined,{month:'long',year:'numeric'}); calendar.innerHTML='';
+ ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(x=>{const e=document.createElement('div');e.className='dow';e.textContent=x;calendar.appendChild(e)});
+ const first=new Date(view.getFullYear(),view.getMonth(),1).getDay(), days=new Date(view.getFullYear(),view.getMonth()+1,0).getDate();
+ for(let i=0;i<first;i++)calendar.appendChild(document.createElement('div'));
+ for(let d=1;d<=days;d++){const iso=isoDate(view.getFullYear(),view.getMonth(),d),dt=dateFromIso(iso),e=document.createElement('button');e.type='button';e.className='day';e.textContent=d;
+   const unavailable=dt<today||dt.getDay()===0; if(unavailable){e.disabled=true;e.classList.add('disabled')} if(iso===selectedDate)e.classList.add('selected'); e.onclick=()=>chooseDate(iso); calendar.appendChild(e);
+ }
+}
+async function loadBooked(){
+ if(ENDPOINT.startsWith('YOUR_')){renderCalendar();return}
+ try{const r=await fetch(ENDPOINT+'?action=availability&start='+encodeURIComponent(isoDate(view.getFullYear(),view.getMonth(),1))+'&end='+encodeURIComponent(isoDate(view.getFullYear(),view.getMonth()+1,new Date(view.getFullYear(),view.getMonth()+1,0).getDate())));const j=await r.json();booked=j.booked||{};renderCalendar();if(selectedDate)showTimes(selectedDate)}catch(e){renderCalendar()}
+}
+function chooseDate(iso){selectedDate=iso;dateInput.value=iso;timeInput.value='';document.getElementById('selectedDateLabel').textContent=dateFromIso(iso).toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});renderCalendar();showTimes(iso)}
+function showTimes(iso){times.innerHTML='';const slots=slotsForDate(iso);if(!slots.length){times.innerHTML='<p class="hint">No appointments are available on Sunday.</p>';return}slots.forEach(slot=>{const b=booked[iso]||[],btn=document.createElement('button');btn.type='button';btn.className='time';btn.textContent=slot;if(b.includes(slot)){btn.disabled=true;btn.textContent=slot+' · Booked'}else btn.onclick=()=>{document.querySelectorAll('.time').forEach(x=>x.classList.remove('selected'));btn.classList.add('selected');timeInput.value=slot};times.appendChild(btn)})}
+document.getElementById('prevMonth').onclick=()=>{const n=new Date(view.getFullYear(),view.getMonth()-1,1);if(n>=new Date(today.getFullYear(),today.getMonth(),1)){view=n;loadBooked()}};
+document.getElementById('nextMonth').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()+1,1);loadBooked()};
+document.querySelectorAll('input[name="service"]').forEach(i=>i.addEventListener('change',()=>{const s=document.querySelector('input[name="service"]:checked');document.getElementById('summaryService').textContent=s?.value||'—';document.getElementById('summaryPrice').textContent=s?.dataset.quote==='true'?'Quote required':'JMD '+Number(s?.dataset.price||0).toLocaleString()}));
+document.getElementById('bookingForm').addEventListener('submit',async e=>{e.preventDefault();if(!dateInput.value||!timeInput.value){statusEl.className='status error';statusEl.textContent='Please choose an available date and time.';return}if(ENDPOINT.startsWith('YOUR_')){statusEl.className='status error';statusEl.textContent='The booking connection is not connected yet. Follow SETUP.md to connect Google Apps Script.';return}statusEl.className='status';statusEl.textContent='Checking availability and sending…';const selected=document.querySelector('input[name="service"]:checked'),data=Object.fromEntries(new FormData(e.target).entries());data.price=selected?.dataset.quote==='true'?'Quote required':'JMD '+Number(selected?.dataset.price||0).toLocaleString();try{const r=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)}),j=await r.json();if(!j.ok)throw new Error(j.error||'Booking failed');statusEl.className='status success';statusEl.textContent='Booking received! Yardscape will contact you at '+data.email+'.';e.target.reset();selectedDate='';dateInput.value='';timeInput.value='';document.getElementById('summaryService').textContent='—';document.getElementById('summaryPrice').textContent='—';loadBooked()}catch(err){statusEl.className='status error';statusEl.textContent=err.message.includes('already')?'That time was just booked. Please choose another time.':'We could not complete the booking. Please try again or call +1 876 342-7405.';loadBooked()}});
+renderCalendar();loadBooked();
+</script>
+</body></html>

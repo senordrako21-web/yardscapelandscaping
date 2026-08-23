@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Book Yardscape Landscaping & Beautification Services.">
+  <title>Book a Service | Yardscape</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">Y</span>
+        <span>Yardscape <small>Landscaping & Beautification</small></span>
+      </a>
+      <nav><a href="index.html">Home</a><a href="index.html#services">Services</a></nav>
+    </div>
+  </header>
+
+  <main class="booking-page">
+    <div class="container narrow">
+      <p class="eyebrow">Booking</p>
+      <h1>Choose your service & time.</h1>
+      <p class="intro">Select a service, date and available time. Fixed-price services show their listed price; plant beds and flowers can be requested as a custom quote.</p>
+
+      <form id="bookingForm" class="booking-form">
+        <div class="form-section">
+          <h2>1. Service</h2>
+          <div class="service-options">
+            <label class="service-option"><input type="radio" name="service" value="General Lawncare" data-price="8000" required><span><b>General Lawncare</b><small>JMD 8,000</small></span></label>
+            <label class="service-option"><input type="radio" name="service" value="Plant Bed Maintenance" data-price="0" data-quote="true"><span><b>Plant Bed Maintenance</b><small>Custom quote</small></span></label>
+            <label class="service-option"><input type="radio" name="service" value="Flowers" data-price="0" data-quote="true"><span><b>Flowers</b><small>Custom quote</small></span></label>
+            <label class="service-option"><input type="radio" name="service" value="Hedging" data-price="5000" required><span><b>Hedging</b><small>JMD 5,000</small></span></label>
+            <label class="service-option"><input type="radio" name="service" value="Sprinkler Installation" data-price="12000" required><span><b>Sprinkler Installation</b><small>JMD 12,000</small></span></label>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-section">
+            <h2>2. Date & time</h2>
+            <label for="date">Date</label>
+            <input id="date" name="date" type="date" required>
+            <label for="time">Preferred time</label>
+            <select id="time" name="time" required>
+              <option value="">Select a time</option>
+              <option>8:00 AM</option><option>9:00 AM</option><option>10:00 AM</option>
+              <option>11:00 AM</option><option>12:00 PM</option><option>1:00 PM</option>
+              <option>2:00 PM</option><option>3:00 PM</option><option>4:00 PM</option>
+            </select>
+            <p class="hint">The date/time is a booking request. Yardscape can confirm or adjust it by email.</p>
+          </div>
+
+          <div class="form-section">
+            <h2>3. Your details</h2>
+            <label for="name">Full name</label>
+            <input id="name" name="name" type="text" autocomplete="name" required>
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email" autocomplete="email" required>
+            <label for="phone">Phone / WhatsApp</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" required>
+            <label for="location">Property location</label>
+            <input id="location" name="location" type="text" placeholder="Town / area" required>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2>4. Notes</h2>
+          <label for="notes">Tell us anything we should know</label>
+          <textarea id="notes" name="notes" rows="5" placeholder="Property size, access details, special requests, etc."></textarea>
+        </div>
+
+        <div class="summary">
+          <div><span>Selected service</span><strong id="summaryService">—</strong></div>
+          <div><span>Price / quote</span><strong id="summaryPrice">—</strong></div>
+        </div>
+
+        <button class="btn btn-full" type="submit">Send Booking Request</button>
+        <p id="status" class="status" role="status"></p>
+        <p class="privacy-note">By submitting, you are requesting a booking/quote. Your information is sent to Yardscape for follow-up.</p>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div><strong>Yardscape</strong><br><span>Landscaping & Beautification Services</span></div>
+      <a href="index.html">Back to home</a>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+  <script>
+    const today = new Date();
+    const iso = new Date(today.getTime() - today.getTimezoneOffset()*60000).toISOString().split('T')[0];
+    document.getElementById('date').min = iso;
+
+    const form = document.getElementById('bookingForm');
+    const statusEl = document.getElementById('status');
+    const serviceInputs = [...document.querySelectorAll('input[name="service"]')];
+
+    function updateSummary() {
+      const selected = serviceInputs.find(i => i.checked);
+      document.getElementById('summaryService').textContent = selected ? selected.value : '—';
+      document.getElementById('summaryPrice').textContent = selected
+        ? (selected.dataset.quote === 'true'
+            ? 'Custom quote'
+            : 'JMD ' + Number(selected.dataset.price).toLocaleString())
+        : '—';
+    }
+    serviceInputs.forEach(i => i.addEventListener('change', updateSummary));
+    updateSummary();
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const selected = serviceInputs.find(i => i.checked);
+      if (!selected) {
+        statusEl.className = 'status error';
+        statusEl.textContent = 'Please select a service.';
+        return;
+      }
+
+      statusEl.className = 'status';
+      statusEl.textContent = 'Sending your booking request…';
+
+      // Google Apps Script redirects its response. A normal cross-origin fetch
+      // can therefore be blocked by the browser. A hidden form + iframe avoids
+      // reading the cross-origin response and lets the booking reach Apps Script.
+      let iframe = document.getElementById('yardscapeSubmitFrame');
+      if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.id = 'yardscapeSubmitFrame';
+        iframe.name = 'yardscapeSubmitFrame';
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+      }
+
+      // Add/update fields that are calculated by the page.
+      let priceField = form.querySelector('input[name="price"]');
+      if (!priceField) {
+        priceField = document.createElement('input');
+        priceField.type = 'hidden';
+        priceField.name = 'price';
+        form.appendChild(priceField);
+      }
+      priceField.value = selected.dataset.quote === 'true'
+        ? 'Custom quote'
+        : 'JMD ' + Number(selected.dataset.price || 0).toLocaleString();
+
+      let sourceField = form.querySelector('input[name="source"]');
+      if (!sourceField) {
+        sourceField = document.createElement('input');
+        sourceField.type = 'hidden';
+        sourceField.name = 'source';
+        form.appendChild(sourceField);
+      }
+      sourceField.value = 'Yardscape website';
+
+      const oldTarget = form.target;
+      const oldAction = form.action;
+      const oldMethod = form.method;
+
+      form.target = 'yardscapeSubmitFrame';
+      form.action = 'https://script.google.com/macros/s/AKfycbxmXzRBeJQGZBUnft7rvabX5Q3jhQpAXhet52yWlGPbyvcyRkGd6qVEleNGHYUDn4_w6A/exec';
+      form.method = 'POST';
+      form.enctype = 'application/x-www-form-urlencoded';
+
+      let finished = false;
+      const finish = () => {
+        if (finished) return;
+        finished = true;
+        statusEl.className = 'status success';
+        statusEl.textContent = 'Thanks! Your booking request was sent to Yardscape. We will contact you to confirm the booking.';
+        form.reset();
+        updateSummary();
+        form.target = oldTarget;
+        form.action = oldAction;
+        form.method = oldMethod;
+      };
+
+      iframe.onload = () => setTimeout(finish, 250);
+      setTimeout(finish, 1800);
+
+      HTMLFormElement.prototype.submit.call(form);
+    });
+  </script>
+</body>
+</html>

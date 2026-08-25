@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Yardscape Admin Calendar</title>
+<link rel="stylesheet" href="./style.css?v=2">
+</head>
+<body>
+<div class="topbar"><div class="container topbar-inner"><span>Yardscape Admin</span><span>Private booking calendar</span></div></div>
+<header class="site-header"><div class="container nav">
+<a class="brand" href="index.html"><img src="./assets/yardscape-logo.png" alt="Yardscape logo"></a>
+<nav><a href="index.html">Website</a><a href="booking.html">Booking</a></nav>
+</div></header>
+<main class="booking-page"><div class="container narrow">
+<p class="eyebrow">Yardscape Admin</p><h1>Booking Calendar</h1>
+<p class="intro">Enter your private admin key to view all bookings saved in the Yardscape booking sheet.</p>
+<div class="admin-toolbar"><input id="key" type="password" placeholder="Admin key" autocomplete="current-password"><button id="load" class="btn" type="button">Load bookings</button></div>
+<div id="adminStatus" class="status" role="status"></div>
+<div class="calendar-head"><button id="prev" class="btn btn-small" type="button">‹</button><strong id="adminMonth"></strong><button id="next" class="btn btn-small" type="button">›</button></div>
+<div id="adminCalendar"></div><div id="details" class="admin-details"></div>
+</div></main>
+<script>
+const ENDPOINT='https://script.google.com/macros/s/AKfycbxmXzRBeJQGZBUnft7rvabX5Q3jhQpAXhet52yWlGPbyvcyRkGd6qVEleNGHYUDn4_w6A/exec';
+let view=new Date(new Date().getFullYear(),new Date().getMonth(),1);let bookings=[];let loaded=false;
+function iso(y,m,d){return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;}
+function escapeHtml(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+function requestJsonp(url){return new Promise((resolve,reject)=>{const cb='yardscapeAdmin_'+Date.now()+'_'+Math.floor(Math.random()*100000);const s=document.createElement('script');const timer=setTimeout(()=>{cleanup();reject(new Error('The Apps Script endpoint did not respond.'))},15000);function cleanup(){clearTimeout(timer);delete window[cb];s.remove();}window[cb]=(data)=>{cleanup();resolve(data)};s.onerror=()=>{cleanup();reject(new Error('Could not connect to the Apps Script deployment.'))};s.src=url+(url.includes('?')?'&':'?')+'callback='+encodeURIComponent(cb);document.body.appendChild(s);});}
+function groupByDate(){const g={};for(const b of bookings){const d=String(b.date||'').slice(0,10);if(!d)continue;(g[d] ||= []).push(b);}return g;}
+function draw(){const byDate=groupByDate();document.getElementById('adminMonth').textContent=view.toLocaleDateString(undefined,{month:'long',year:'numeric'});let c=document.getElementById('adminCalendar');let html='<div class="admin-grid">'+['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(x=>`<b>${x}</b>`).join('');let first=new Date(view.getFullYear(),view.getMonth(),1).getDay(),days=new Date(view.getFullYear(),view.getMonth()+1,0).getDate();for(let i=0;i<first;i++)html+='<div></div>';for(let d=1;d<=days;d++){let x=iso(view.getFullYear(),view.getMonth(),d),list=byDate[x]||[];html+=`<button class="admin-day${list.length?' has-bookings':''}" onclick="showDay('${x}')"><b>${d}</b><span>${list.length?list.length+' booking'+(list.length>1?'s':''):''}</span></button>`;}html+='</div>';c.innerHTML=html;}
+function showDay(x){const list=groupByDate()[x]||[];let html='<h2>'+new Date(x+'T12:00:00').toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'})+'</h2>';if(!list.length){html+='<p>No bookings.</p>';}else{html+=list.map(b=>`<article class="booking-item"><b>${escapeHtml(b.time)} — ${escapeHtml(b.service)}</b><br><strong>${escapeHtml(b.name)}</strong><br>${escapeHtml(b.phone)}<br><a href="mailto:${encodeURIComponent(b.email||'')}">${escapeHtml(b.email)}</a><br>${escapeHtml(b.location)}<br><strong>${escapeHtml(b.price)}</strong><br><small>Status: ${escapeHtml(b.status||'Confirmed')}</small><br><small>${escapeHtml(b.notes||'')}</small></article>`).join('');}document.getElementById('details').innerHTML=html;}
+async function load(){const key=document.getElementById('key').value.trim();const status=document.getElementById('adminStatus');if(!key){status.className='status error';status.textContent='Enter your admin key.';return;}status.className='status';status.textContent='Loading bookings…';try{const j=await requestJsonp(ENDPOINT+'?action=admin&key='+encodeURIComponent(key));if(!j||!j.ok)throw new Error(j&&j.error?j.error:'Admin request failed.');bookings=Array.isArray(j.bookings)?j.bookings:[];loaded=true;localStorage.setItem('yardscapeAdminKey',key);status.className='status success';status.textContent=`Loaded ${bookings.length} booking${bookings.length===1?'':'s'}.`;draw();showDay(iso(view.getFullYear(),view.getMonth(),new Date().getDate()));}catch(e){status.className='status error';status.textContent=e.message==='Unauthorized'?'Incorrect admin key.':'Could not load bookings. Check your admin key and Apps Script deployment.';}}
+document.getElementById('load').onclick=load;document.getElementById('prev').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()-1,1);draw();};document.getElementById('next').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()+1,1);draw();};document.getElementById('key').value=localStorage.getItem('yardscapeAdminKey')||'';draw();
+</script>
+</body></html>
